@@ -99,11 +99,6 @@
       </div>
     </header>
 
-    <p class="notice">
-      Verify this contract address and its source on BscScan before approving tokens or investing.
-      This site is an interface only; it cannot guarantee returns or recover funds.
-      Contract: <a id="contract-link" target="_blank" rel="noopener noreferrer"></a>
-    </p>
     <div id="status" class="status" role="status" aria-live="polite"></div>
 
     <section class="grid" aria-label="Account overview">
@@ -197,8 +192,7 @@
       let tokenDecimals;
       let currentCheck;
 
-      $("contract-link").href = `${EXPLORER}/address/${ADDRESS}`;
-      $("contract-link").textContent = `${ADDRESS.slice(0, 8)}…${ADDRESS.slice(-6)}`;
+
 
       function report(message, kind) {
         statusBox.textContent = message;
