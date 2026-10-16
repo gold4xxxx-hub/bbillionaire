@@ -140,6 +140,11 @@
       <h2>Your investments</h2>
       <div id="investments"><p class="empty">Connect your wallet to view investments.</p></div>
     </section>
+    <section class="card investment-list">
+      <h2>Your activity</h2>
+      <p class="card-description">Read directly from the contract for the connected wallet.</p>
+      <div id="activity"><p class="empty">Connect your wallet to view activity.</p></div>
+    </section>
     <p class="footer">Network: BNB Smart Chain Mainnet (chain ID 56). Never share your seed phrase or private key.</p>
   </main>
 
@@ -286,16 +291,34 @@
           $("wallet-hint").textContent = `Contract reward balance: ${formatAmount(contractBalance)} JSAV${user.held ? " · Account is held" : ""}${user.blocked ? " · Account is blocked" : ""}`;
           claimButton.disabled = Boolean(user.held || user.blocked || user.nextClaimAt > BigInt(Math.floor(Date.now() / 1000)) || count === 0n);
           const rows = [];
+          const events = [];
           const total = Number(count);
           for (let i = 0; i < total; i++) {
             const [investment, roi] = await Promise.all([
               contract.investments(account, i),
               contract.availableROI(account, i)
             ]);
+            events.push({ time: investment.startedAt, text: `Invested <strong>${formatAmount(investment.principal)} JSAV</strong> (investment #${i})` });
+            if (investment.roiCredited > 0n) events.push({ time: null, text: `ROI credited on #${i}: <strong>${formatAmount(investment.roiCredited)} JSAV</strong>` });
+            if (roi > 0n) events.push({ time: null, text: `ROI available on #${i}: <strong>${formatAmount(roi)} JSAV</strong>` });
             rows.push(
               `<div class="investment-row"><span>#${i}</span><span>Principal<br><strong>${formatAmount(investment.principal)} JSAV</strong></span><span>Earned<br><strong>${formatAmount(investment.totalEarned)} JSAV</strong></span><span>Available ROI<br><strong>${formatAmount(roi)} JSAV</strong></span></div>`
             );
           }
+          const zero = "0x0000000000000000000000000000000000000000";
+          const summary = [];
+          if (user.exists) {
+            summary.push({ time: null, text: user.referrer && user.referrer !== zero ? `Referrer: <strong>${user.referrer}</strong>` : "Referrer: none" });
+            summary.push({ time: null, text: `Direct referrals: <strong>${user.directCount}</strong>` });
+            summary.push({ time: null, text: `Total invested: <strong>${formatAmount(user.totalInvested)} JSAV</strong> across ${total} investment(s)` });
+            summary.push({ time: null, text: `Pending income (claimable): <strong>${formatAmount(user.pendingIncome)} JSAV</strong>` });
+            summary.push({ time: null, text: `Next claim: <strong>${formatTime(user.nextClaimAt)}</strong>` });
+            summary.push({ time: null, text: `Status: <strong>${user.blocked ? "Blocked" : user.held ? "Held" : "Active"}</strong>` });
+          }
+          events.sort((a, b) => (a.time === null) - (b.time === null) || Number((b.time ?? 0n) - (a.time ?? 0n)));
+          const activityRows = [...events, ...summary].map(e =>
+            `<div class="investment-row" style="grid-template-columns:170px 1fr"><span>${e.time ? new Date(Number(e.time) * 1000).toLocaleString() : "Current"}</span><span>${e.text}</span></div>`);
+          $("activity").innerHTML = activityRows.length ? activityRows.join("") : '<p class="empty">No activity found for this wallet.</p>';
           $("investments").innerHTML = rows.length ? rows.join("") : '<p class="empty">No investments found for this wallet.</p>';
         } catch (error) {
           report(explainError(error), "error");
