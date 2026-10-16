@@ -120,6 +120,7 @@
         <input id="referrer" type="text" autocomplete="off" placeholder="Leave blank to use the contract root referrer">
         <div class="actions">
           <button id="check-button" class="secondary" type="button" disabled>Check investment</button>
+          <button id="approve-button" class="secondary" type="button" disabled>Approve JSAV</button>
           <button id="invest-button" type="button" disabled>Invest</button>
         </div>
         <p id="check-result" class="hint" aria-live="polite"></p>
@@ -264,6 +265,7 @@
           $("network-label").textContent = "BNB Smart Chain · Connected";
           checkButton.disabled = false;
           investButton.disabled = false;
+          $("approve-button").disabled = false;
           claimButton.disabled = false;
           report("Wallet connected. Confirm the contract address and transaction details before signing.", "success");
           await refresh();
@@ -349,14 +351,35 @@
           ]);
           const detail = `${currentCheck.reason || (currentCheck.ready ? "Ready to invest." : "Investment is not ready.")} Cost including fee: ${formatAmount(cost.total)} JSAV. Limits: ${formatAmount(min)}–${formatAmount(max)} JSAV. Allowance: ${formatAmount(currentCheck.allowance)} JSAV.`;
           $("check-result").textContent = detail;
+          const needsApprovalOnly = !currentCheck.ready && currentCheck.balance >= currentCheck.requiredAmount && currentCheck.allowance < currentCheck.requiredAmount;
           if (currentCheck.ready) report(detail, "success");
+          else if (needsApprovalOnly) report(`${detail} Click "Approve JSAV" first.`, "");
           else report(detail, "error");
-          return currentCheck.ready;
+          return currentCheck.ready || needsApprovalOnly;
         } catch (error) {
           currentCheck = undefined;
           $("check-result").textContent = explainError(error);
           report(explainError(error), "error");
           return false;
+        }
+      }
+
+      async function approveJsav() {
+        try {
+          if (!signer || !contract || !token || !account) throw new Error("Connect your wallet first.");
+          await ensureBsc();
+          const amount = parsedInvestmentAmount();
+          const cost = await contract.requiredInvestmentCost(amount);
+          const balance = await token.balanceOf(account);
+          if (balance < cost.total) throw new Error(`Insufficient JSAV. You need ${formatAmount(cost.total)} JSAV (including fee) but have ${formatAmount(balance)}.`);
+          report(`Approve ${formatAmount(cost.total)} JSAV in your wallet…`, "");
+          const approval = await token.approve(ADDRESS, cost.total);
+          report(`Approval submitted: ${approval.hash}. Waiting for confirmation…`);
+          await approval.wait();
+          report("JSAV approved. You can now click Invest.", "success");
+          await checkInvestment();
+        } catch (error) {
+          report(explainError(error), "error");
         }
       }
 
@@ -406,6 +429,7 @@
       connectButton.addEventListener("click", connect);
       checkButton.addEventListener("click", checkInvestment);
       investButton.addEventListener("click", invest);
+      $("approve-button").addEventListener("click", approveJsav);
       claimButton.addEventListener("click", claim);
       refreshButton.addEventListener("click", refresh);
 
