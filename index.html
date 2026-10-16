@@ -101,6 +101,8 @@
 
     <div id="status" class="status" role="status" aria-live="polite"></div>
 
+    <section class="card" style="margin-bottom:14px"><div class="metric-label">Contract balance (reward pool)</div><div class="metric-value" id="contract-balance">Loading…</div></section>
+
     <section class="grid" aria-label="Account overview">
       <article class="card"><div class="metric-label">Your JSAV balance</div><div class="metric-value" id="token-balance">—</div></article>
       <article class="card"><div class="metric-label">Investments</div><div class="metric-value" id="investment-count">—</div></article>
@@ -407,6 +409,18 @@
       claimButton.addEventListener("click", claim);
       refreshButton.addEventListener("click", refresh);
 
+      async function loadContractBalance() {
+        try {
+          const ro = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org/", 56, { staticNetwork: true });
+          const c = new ethers.Contract(ADDRESS, CONTRACT_ABI, ro);
+          const bal = await c.contractJSAVBalance();
+          $("contract-balance").textContent = `${ethers.formatUnits(bal, 18).replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")} JSAV`;
+        } catch (e) {
+          $("contract-balance").textContent = "Unavailable";
+        }
+      }
+      loadContractBalance();
+      setInterval(loadContractBalance, 60000);
       if (window.ethereum) {
         window.ethereum.on("accountsChanged", () => window.location.reload());
         window.ethereum.on("chainChanged", () => window.location.reload());
