@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Bbillionaire | USDT</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1120;
+      color: #eef2ff;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; }
+    button, input { font: inherit; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      background: #f1b84b;
+      color: #1b160b;
+      cursor: pointer;
+      font-weight: 750;
+      padding: 12px 16px;
+    }
+    button:hover:not(:disabled) { background: #ffd276; }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    button.secondary { background: #25324a; color: #eef2ff; }
+    button.secondary:hover:not(:disabled) { background: #344563; }
+    input {
+      width: 100%;
+      border: 1px solid #34415b;
+      border-radius: 9px;
+      background: #101a2d;
+      color: #eef2ff;
+      padding: 12px;
+    }
+    input:focus { border-color: #f1b84b; outline: 2px solid #f1b84b33; }
+    a { color: #f4c76f; }
+    .shell { max-width: 1080px; margin: 0 auto; padding: 32px 20px 56px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: #f1b84b; color: #1b160b; font-weight: 900; }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 2px; font-size: 20px; }
+    .subtle, .muted { color: #9ca9c2; }
+    .subtle { margin: 0; font-size: 13px; }
+    .wallet { display: flex; align-items: center; gap: 12px; }
+    .network { color: #a9e8c0; font-size: 13px; }
+    .notice { margin: 0 0 20px; padding: 14px 16px; border: 1px solid #755d2c; border-radius: 12px; background: #2b2416; color: #f5d899; font-size: 13px; line-height: 1.55; }
+    .status { display: none; margin: 0 0 20px; padding: 13px 15px; border: 1px solid #34415b; border-radius: 10px; background: #111a2b; color: #dce5fa; overflow-wrap: anywhere; }
+    .status.show { display: block; }
+    .status.error { border-color: #793d48; background: #2b1720; color: #ffc4ce; }
+    .status.success { border-color: #36684b; background: #13271e; color: #baf0ce; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .card { border: 1px solid #26324a; border-radius: 14px; background: #111a2b; padding: 19px; }
+    .metric-label { color: #9ca9c2; font-size: 13px; }
+    .metric-value { margin-top: 9px; font-size: 20px; font-weight: 760; overflow-wrap: anywhere; }
+    .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    h2 { margin-bottom: 5px; font-size: 18px; }
+    .card-description { margin: 0 0 18px; color: #9ca9c2; font-size: 13px; line-height: 1.5; }
+    label { display: block; margin: 14px 0 7px; color: #b8c3d8; font-size: 13px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .hint { min-height: 20px; margin: 10px 0 0; color: #9ca9c2; font-size: 13px; line-height: 1.5; }
+    .investment-list { margin-top: 16px; }
+    .investment-row { display: grid; grid-template-columns: 50px 1fr 1fr 1fr; gap: 12px; padding: 13px 0; border-top: 1px solid #26324a; font-size: 13px; }
+    .investment-row span:first-child { color: #9ca9c2; }
+    .empty { padding: 18px 0 2px; color: #9ca9c2; font-size: 13px; }
+    .footer { margin-top: 18px; color: #8491aa; font-size: 12px; line-height: 1.6; }
+    @media (max-width: 760px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .columns { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .shell { padding: 22px 14px 40px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .wallet { width: 100%; justify-content: space-between; }
+      .investment-row { grid-template-columns: 38px 1fr 1fr; }
+      .investment-row span:last-child { grid-column: 2 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">B</div>
+        <div>
+          <h1>Bbillionaire</h1>
+        </div>
+      </div>
+      <div class="wallet">
+        <span class="network" id="network-label">BNB Smart Chain</span>
+        <a href="bbillionaire.pdf" target="_blank" rel="noopener">Business plan</a>
+        <button id="connect-button" type="button">Connect wallet</button>
+      </div>
+    </header>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+
+    <section class="card" style="margin-bottom:14px"><div class="metric-label">Contract USDT balance</div><div class="metric-value" id="contract-balance">Loading…</div></section>
+
+    <section class="grid" aria-label="Account overview">
+      <article class="card"><div class="metric-label">Your USDT balance</div><div class="metric-value" id="token-balance">—</div></article>
+      <article class="card"><div class="metric-label">Investments</div><div class="metric-value" id="investment-count">—</div></article>
+      <article class="card"><div class="metric-label">Total invested</div><div class="metric-value" id="total-invested">—</div></article>
+      <article class="card"><div class="metric-label">Pending income</div><div class="metric-value" id="pending-income">—</div></article>
+    </section>
+
+    <section class="columns">
+      <article class="card">
+        <h2>Invest USDT</h2>
+        <p class="card-description">You may need to approve USDT first. The wallet will ask you to confirm each transaction.</p>
+        <label for="amount">Investment amount (USDT)</label>
+        <input id="amount" type="number" min="0" step="any" inputmode="decimal" placeholder="USDT amount, e.g. 100">
+        <label for="referrer">Referrer address (optional)</label>
+        <input id="referrer" type="text" autocomplete="off" placeholder="Leave blank to use the contract root referrer">
+        <div class="actions">
+          <button id="check-button" class="secondary" type="button" disabled>Check investment</button>
+          <button id="approve-button" class="secondary" type="button" disabled>Approve USDT</button>
+          <button id="invest-button" type="button" disabled>Invest</button>
+        </div>
+        <p id="check-result" class="hint" aria-live="polite"></p>
+      </article>
+
+      <article class="card">
+        <h2>Claim income</h2>
+        <p class="card-description">Claims follow the contract’s own eligibility rules and timing. Review the transaction in your wallet before confirming.</p>
+        <div class="metric-label">Claimable now</div>
+        <div class="metric-value" id="next-claim">—</div>
+        <div class="actions">
+          <button id="claim-button" type="button" disabled>Claim</button>
+          <button id="refresh-button" class="secondary" type="button">Refresh</button>
+        </div>
+        <p class="hint" id="wallet-hint">Connect a wallet on BNB Smart Chain to load your account.</p>
+      </article>
+    </section>
+
+    <section class="card investment-list">
+      <h2>Your investments</h2>
+      <div id="investments"><p class="empty">Connect your wallet to view investments.</p></div>
+    </section>
+    <section class="card investment-list">
+      <h2>Your activity</h2>
+      <p class="card-description">Read directly from the contract for the connected wallet.</p>
+      <div id="activity"><p class="empty">Connect your wallet to view activity.</p></div>
+    </section>
+    <p class="footer">Network: BNB Smart Chain Mainnet (chain ID 56). Never share your seed phrase or private key.</p>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const ADDRESS = "0x7C9ef25dD9e20013d49460e062c5D04976ebd70F";
+      const CHAIN_ID = 56n;
+      const CHAIN_HEX = "0x38";
+      const EXPLORER = "https://bscscan.com";
+      const TOKEN_SYMBOL = "USDT";
+      const CONTRACT_ABI = [
+        "function USDT_BEP20() view returns (address)",
+        "function isSupportedToken(address _token) view returns (bool)",
+        "function getTokenDecimals(address _token) view returns (uint8)",
+        "function getDepositLimits(address _user,address _token) view returns (uint256 minAmount,uint256 maxAmount,uint256 remainingLifetime)",
+        "function getRequiredApproval(uint256 _amount) view returns (uint256 totalRequired,uint256 fee)",
+        "function getUserSummary(address _user,address _token) view returns (uint256 totalInvested,uint256 packageCount,uint256 totalMaxCap,uint256 totalClaimed,uint256 totalClaimableNow,uint256 totalRemainingToEarn,uint256 directs,bool blocked,bool held)",
+        "function getUserInvestments(address _user,address _token) view returns ((uint256 packageIndex,uint256 amount,uint256 claimedROI,uint256 claimedLevel,uint256 pendingROI,uint256 pendingLevel,uint256 totalEarned,uint256 maxCap,uint256 remainingToEarn,uint256 lastAccrualTime,uint256 createdAt,bool isCapReached)[] investments)",
+        "function deposit(address _token,uint256 _amount,address _referrer)",
+        "function claim(address _token)"
+      ];
+      const TOKEN_ABI = [
+        "function balanceOf(address account) view returns (uint256)",
+        "function allowance(address owner,address spender) view returns (uint256)",
+        "function approve(address spender,uint256 amount) returns (bool)"
+      ];
+
+      const $ = (id) => document.getElementById(id);
+      const connectButton = $("connect-button");
+      const checkButton = $("check-button");
+      const investButton = $("invest-button");
+      const claimButton = $("claim-button");
+      const refreshButton = $("refresh-button");
+      const amountInput = $("amount");
+      const statusBox = $("status");
+      let provider;
+      let signer;
+      let account;
+      let contract;
+      let token;
+      let tokenAddress;
+      let tokenDecimals;
+
+      function report(message, kind) {
+        statusBox.textContent = message;
+        statusBox.className = `status show${kind ? ` ${kind}` : ""}`;
+      }
+
+      function explainError(error) {
+        return error?.shortMessage || error?.reason || error?.data?.message || error?.message || "An unexpected error occurred.";
+      }
+
+      function formatAmount(value) {
+        return ethers.formatUnits(value, tokenDecimals ?? 18)
+          .replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
+          .replace(/\.$/, "")
+          .slice(0, 32) || "0";
+      }
+
+      function formatTimestamp(seconds) {
+        return seconds === 0n ? "Unknown" : new Date(Number(seconds) * 1000).toLocaleString();
+      }
+
+      async function ensureBsc() {
+        if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
+        let network = await provider.getNetwork();
+        if (network.chainId === CHAIN_ID) return;
+        try {
+          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
+        } catch (error) {
+          if (error.code !== 4902) throw error;
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: CHAIN_HEX,
+              chainName: "BNB Smart Chain",
+              nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+              rpcUrls: ["https://bsc-dataseed.binance.org/"],
+              blockExplorerUrls: [EXPLORER]
+            }]
+          });
+        }
+        network = await provider.getNetwork();
+        if (network.chainId !== CHAIN_ID) throw new Error("Switch your wallet to BNB Smart Chain Mainnet (chain ID 56).");
+      }
+
+      async function connect() {
+        try {
+          if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
+          provider = new ethers.BrowserProvider(window.ethereum);
+          await ensureBsc();
+          const accounts = await provider.send("eth_requestAccounts", []);
+          if (!accounts.length) throw new Error("The wallet did not provide an account.");
+          account = ethers.getAddress(accounts[0]);
+          signer = await provider.getSigner();
+          contract = new ethers.Contract(ADDRESS, CONTRACT_ABI, signer);
+          tokenAddress = ethers.getAddress(await contract.USDT_BEP20());
+          if (!await contract.isSupportedToken(tokenAddress)) throw new Error("The contract does not support its configured BNB Smart Chain USDT token.");
+          token = new ethers.Contract(tokenAddress, TOKEN_ABI, signer);
+          tokenDecimals = Number(await contract.getTokenDecimals(tokenAddress));
+          connectButton.textContent = `${account.slice(0, 6)}…${account.slice(-4)}`;
+          connectButton.title = account;
+          $("wallet-hint").textContent = `Connected: ${account}`;
+          $("network-label").textContent = "BNB Smart Chain · Connected";
+          checkButton.disabled = false;
+          investButton.disabled = false;
+          $("approve-button").disabled = false;
+          claimButton.disabled = false;
+          report(`Wallet connected. Confirm each ${TOKEN_SYMBOL} transaction in your wallet.`, "success");
+          await refresh();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      async function refresh() {
+        if (!account || !contract || !token) {
+          if (!window.ethereum) report("No browser wallet detected. Install a compatible wallet to connect.");
+          return;
+        }
+        try {
+          await ensureBsc();
+          const [balance, summary, holdings, contractBalance] = await Promise.all([
+            token.balanceOf(account),
+            contract.getUserSummary(account, tokenAddress),
+            contract.getUserInvestments(account, tokenAddress),
+            token.balanceOf(ADDRESS)
+          ]);
+          $("token-balance").textContent = `${formatAmount(balance)} ${TOKEN_SYMBOL}`;
+          $("contract-balance").textContent = `${formatAmount(contractBalance)} ${TOKEN_SYMBOL}`;
+          $("investment-count").textContent = summary.packageCount.toString();
+          $("total-invested").textContent = `${formatAmount(summary.totalInvested)} ${TOKEN_SYMBOL}`;
+          $("pending-income").textContent = `${formatAmount(summary.totalClaimableNow)} ${TOKEN_SYMBOL}`;
+          $("next-claim").textContent = `${formatAmount(summary.totalClaimableNow)} ${TOKEN_SYMBOL}`;
+          $("wallet-hint").textContent = `Connected: ${account}${summary.held ? " · Account is held" : ""}${summary.blocked ? " · Account is blocked" : ""}`;
+          claimButton.disabled = Boolean(summary.held || summary.blocked || summary.totalClaimableNow === 0n);
+          const rows = [];
+          const events = [];
+          for (const investment of holdings) {
+            const available = investment.pendingROI + investment.pendingLevel;
+            events.push({
+              time: investment.createdAt,
+              text: `Deposited <strong>${formatAmount(investment.amount)} ${TOKEN_SYMBOL}</strong> (package #${investment.packageIndex})`
+            });
+            if (available > 0n) {
+              events.push({
+                time: null,
+                text: `Claimable on #${investment.packageIndex}: <strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong>`
+              });
+            }
+            rows.push(
+              `<div class="investment-row"><span>#${investment.packageIndex}</span><span>Deposit<br><strong>${formatAmount(investment.amount)} ${TOKEN_SYMBOL}</strong></span><span>Earned<br><strong>${formatAmount(investment.totalEarned)} ${TOKEN_SYMBOL}</strong></span><span>Claimable<br><strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong></span></div>`
+            );
+          }
+          events.push(
+            { time: null, text: `Total claimed: <strong>${formatAmount(summary.totalClaimed)} ${TOKEN_SYMBOL}</strong>` },
+            { time: null, text: `Remaining earning cap: <strong>${formatAmount(summary.totalRemainingToEarn)} ${TOKEN_SYMBOL}</strong>` },
+            { time: null, text: `Direct referrals: <strong>${summary.directs}</strong>` },
+            { time: null, text: `Status: <strong>${summary.blocked ? "Blocked" : summary.held ? "Held" : "Active"}</strong>` }
+          );
+          events.sort((a, b) => {
+            if (a.time === null) return b.time === null ? 0 : 1;
+            if (b.time === null) return -1;
+            return Number(b.time - a.time);
+          });
+          const activityRows = events.map(e =>
+            `<div class="investment-row" style="grid-template-columns:170px 1fr"><span>${e.time === null ? "Current" : formatTimestamp(e.time)}</span><span>${e.text}</span></div>`);
+          $("activity").innerHTML = activityRows.length ? activityRows.join("") : '<p class="empty">No activity found for this wallet.</p>';
+          $("investments").innerHTML = rows.length ? rows.join("") : '<p class="empty">No investments found for this wallet.</p>';
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      function parsedInvestmentAmount() {
+        const raw = amountInput.value.trim();
+        if (!raw) throw new Error("Enter an investment amount.");
+        if (!/^\d+(\.\d+)?$/.test(raw)) throw new Error(`Enter a valid ${TOKEN_SYMBOL} amount.`);
+        const value = ethers.parseUnits(raw, tokenDecimals);
+        if (value <= 0n) throw new Error("Investment amount must be greater than zero.");
+        return value;
+      }
+
+      async function getInvestmentDetails() {
+        if (!contract || !token || !account) throw new Error("Connect your wallet first.");
+        await ensureBsc();
+        const amount = parsedInvestmentAmount();
+        const [limits, cost, balance, allowance] = await Promise.all([
+          contract.getDepositLimits(account, tokenAddress),
+          contract.getRequiredApproval(amount),
+          token.balanceOf(account),
+          token.allowance(account, ADDRESS)
+        ]);
+        if (amount < limits.minAmount || amount > limits.maxAmount || amount > limits.remainingLifetime) {
+          throw new Error(`Deposit must be within the current limits of ${formatAmount(limits.minAmount)}–${formatAmount(limits.maxAmount)} ${TOKEN_SYMBOL}, with ${formatAmount(limits.remainingLifetime)} ${TOKEN_SYMBOL} remaining in your lifetime limit.`);
+        }
+        if (balance < cost.totalRequired) {
+          throw new Error(`Insufficient ${TOKEN_SYMBOL}. You need ${formatAmount(cost.totalRequired)} ${TOKEN_SYMBOL} including the ${formatAmount(cost.fee)} ${TOKEN_SYMBOL} fee, but have ${formatAmount(balance)}.`);
+        }
+        return { amount, limits, cost, balance, allowance };
+      }
+
+      async function checkInvestment() {
+        try {
+          const details = await getInvestmentDetails();
+          const detail = `Deposit: ${formatAmount(details.amount)} ${TOKEN_SYMBOL}. Total approval: ${formatAmount(details.cost.totalRequired)} ${TOKEN_SYMBOL}, including ${formatAmount(details.cost.fee)} fee.`;
+          $("check-result").textContent = detail;
+          if (details.allowance < details.cost.totalRequired) {
+            report(`${detail} Approve ${TOKEN_SYMBOL} before investing.`, "");
+          } else {
+            report(`${detail} Ready to deposit.`, "success");
+          }
+          return true;
+        } catch (error) {
+          $("check-result").textContent = explainError(error);
+          report(explainError(error), "error");
+          return false;
+        }
+      }
+
+      async function approveUsdt() {
+        try {
+          if (!signer) throw new Error("Connect your wallet first.");
+          const details = await getInvestmentDetails();
+          report(`Approve ${formatAmount(details.cost.totalRequired)} ${TOKEN_SYMBOL} in your wallet…`, "");
+          const approval = await token.approve(ADDRESS, details.cost.totalRequired);
+          report(`Approval submitted: ${approval.hash}. Waiting for confirmation…`);
+          await approval.wait();
+          report(`${TOKEN_SYMBOL} approved. You can now click Invest.`, "success");
+          await checkInvestment();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      async function invest() {
+        try {
+          if (!signer || !contract || !token || !account) throw new Error("Connect your wallet first.");
+          const details = await getInvestmentDetails();
+          const enteredReferrer = $("referrer").value.trim();
+          const referrer = enteredReferrer ? ethers.getAddress(enteredReferrer) : ethers.ZeroAddress;
+          if (details.allowance < details.cost.totalRequired) {
+            report(`Requesting ${TOKEN_SYMBOL} approval. Confirm the approval in your wallet.`, "");
+            const approval = await token.approve(ADDRESS, details.cost.totalRequired);
+            report(`Approval submitted: ${approval.hash}. Waiting for confirmation…`);
+            await approval.wait();
+          }
+          report("Submitting deposit. Confirm the transaction in your wallet.", "");
+          const transaction = await contract.deposit(tokenAddress, details.amount, referrer);
+          report(`Investment submitted: ${transaction.hash}. Waiting for confirmation…`);
+          await transaction.wait();
+          report(`Deposit confirmed. Transaction: ${transaction.hash}`, "success");
+          $("check-result").textContent = "";
+          await refresh();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      async function claim() {
+        try {
+          if (!contract) throw new Error("Connect your wallet first.");
+          await ensureBsc();
+          report("Submitting claim. Confirm the transaction in your wallet.", "");
+          const transaction = await contract.claim(tokenAddress);
+          report(`Claim submitted: ${transaction.hash}. Waiting for confirmation…`);
+          await transaction.wait();
+          report(`Claim confirmed. Transaction: ${transaction.hash}`, "success");
+          await refresh();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      connectButton.addEventListener("click", connect);
+      checkButton.addEventListener("click", checkInvestment);
+      investButton.addEventListener("click", invest);
+      $("approve-button").addEventListener("click", approveUsdt);
+      claimButton.addEventListener("click", claim);
+      refreshButton.addEventListener("click", refresh);
+
+      async function loadContractBalance() {
+        try {
+          const ro = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org/", 56, { staticNetwork: true });
+          const c = new ethers.Contract(ADDRESS, CONTRACT_ABI, ro);
+          const configuredToken = await c.USDT_BEP20();
+          const readToken = new ethers.Contract(configuredToken, TOKEN_ABI, ro);
+          const [bal, decimals] = await Promise.all([
+            readToken.balanceOf(ADDRESS),
+            c.getTokenDecimals(configuredToken)
+          ]);
+          $("contract-balance").textContent = `${ethers.formatUnits(bal, decimals).replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")} ${TOKEN_SYMBOL}`;
+        } catch (error) {
+          $("contract-balance").textContent = "Unavailable";
+          report(`Could not load contract ${TOKEN_SYMBOL} balance: ${explainError(error)}`, "error");
+        }
+      }
+      loadContractBalance();
+      setInterval(loadContractBalance, 60000);
+      if (window.ethereum) {
+        window.ethereum.on("accountsChanged", () => window.location.reload());
+        window.ethereum.on("chainChanged", () => window.location.reload());
+      } else {
+        $("wallet-hint").textContent = "No browser wallet detected. Install a compatible wallet to connect.";
+      }
+    })();
+  </script>
+</body>
+</html>
