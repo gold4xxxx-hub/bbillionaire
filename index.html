@@ -160,14 +160,13 @@
     .token-tab { width: auto; min-height: 0; border: 0; border-radius: 999px; background: transparent; color: #e6c989; font-size: 11px; font-weight: 750; padding: 6px 14px; cursor: pointer; box-shadow: none; }
     .token-tab.active { background: #e8bd72; color: #101827; }
     .token-pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(232, 189, 114, .18); border-radius: 999px; background: rgba(232, 189, 114, .06); color: #e6c989; font-size: 10px; font-weight: 750; padding: 7px 10px; white-space: nowrap; }
-    .token-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
     label { display: block; margin: 16px 0 7px; color: #c3cad2; font-size: 11px; font-weight: 650; }
     .input-shell { position: relative; }
     .input-shell input { padding-right: 72px; }
     .input-suffix { position: absolute; top: 50%; right: 14px; color: var(--gold); font-size: 11px; font-weight: 750; transform: translateY(-50%); }
     .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
     .actions button { flex: 1 1 auto; min-height: 43px; font-size: 12px; }
-    .hint { min-height: 18px; margin: 11px 0 0; color: #929eac; font-size: 11px; line-height: 1.55; }
+    .hint { min-height: 18px; margin: 11px 0 0; color: #929eac; font-size: 11px; line-height: 1.55; overflow-wrap: anywhere; }
     .claim-panel { display: flex; flex-direction: column; }
     .claim-display { margin: auto 0 0; border: 1px solid rgba(157, 224, 189, .12); border-radius: 13px; background: linear-gradient(135deg, rgba(56, 103, 77, .12), rgba(24, 38, 34, .12)); padding: 18px; }
     .claim-display .metric-value { margin-top: 8px; color: var(--green); font-size: clamp(24px, 3vw, 31px); }
@@ -229,8 +228,8 @@
         </div>
       </div>
       <div class="wallet">
-        <span class="network" id="network-label">BNB Smart Chain</span>
-        <a class="explorer-link" href="https://bscscan.com/address/0x7C9ef25dD9e20013d49460e062c5D04976ebd70F" target="_blank" rel="noopener">View contract ↗</a>
+        <span class="network" id="network-label">Ethereum</span>
+        <a class="explorer-link" href="https://etherscan.io/address/0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514" target="_blank" rel="noopener">View contract ↗</a>
         <button id="connect-button" type="button">Connect wallet</button>
       </div>
     </header>
@@ -239,14 +238,14 @@
 
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">Bbillionaire · BNB Smart Chain</p>
+        <p class="eyebrow">Bbillionaire · Ethereum</p>
         <h2 id="hero-title">Your on-chain finances,<br><span>in one clear view.</span></h2>
-        <p class="hero-description">Track your USDT deposits, monitor claimable income, and manage your account directly from your connected wallet.</p>
+        <p class="hero-description">Track your USDT and GC deposits, monitor accrued income, and manage your account directly from your connected wallet.</p>
       </div>
       <div class="hero-aside">
         <p class="hero-aside-label">Contract address</p>
-        <code class="hero-contract">0x7C9e…ebd70F</code>
-        <a class="hero-explorer" href="https://bscscan.com/address/0x7C9ef25dD9e20013d49460e062c5D04976ebd70F" target="_blank" rel="noopener">Explore on BscScan</a>
+        <code class="hero-contract">0x685F…ED514</code>
+        <a class="hero-explorer" href="https://etherscan.io/address/0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514" target="_blank" rel="noopener">Explore on Etherscan</a>
       </div>
     </section>
 
@@ -292,27 +291,27 @@
       <article class="card panel claim-panel">
         <div class="panel-header">
           <div>
-            <h2>Claim income</h2>
-            <p class="card-description">Available rewards from your deposits.</p>
+            <h2>Withdraw income</h2>
+            <p class="card-description">Accrued rewards from your deposits. Withdrawals have a cooldown.</p>
           </div>
           <span class="token-pill">REWARDS</span>
         </div>
         <div class="claim-display">
-          <div class="metric-label">Available to claim</div>
+          <div class="metric-label">Available to withdraw</div>
           <div class="metric-value" id="next-claim">—</div>
         </div>
         <div class="actions claim-actions">
-          <button id="claim-button" type="button" disabled>Claim</button>
+          <button id="claim-button" type="button" disabled>Withdraw</button>
           <button id="refresh-button" class="secondary" type="button">Refresh</button>
         </div>
-        <p class="hint wallet-hint" id="wallet-hint">Connect a wallet on BNB Smart Chain to load your account.</p>
+        <p class="hint wallet-hint" id="wallet-hint">Connect a wallet on Ethereum to load your account.</p>
       </article>
     </section>
 
     <section class="lists">
       <article class="card panel list-card">
         <div class="section-heading">
-          <div><h2>Your deposits</h2><p>Package balances and available rewards</p></div>
+          <div><h2>Your deposits</h2><p>Package balances and accrued rewards</p></div>
         </div>
         <div id="investments"><p class="empty">Connect your wallet to view deposits.</p></div>
       </article>
@@ -324,1165 +323,24 @@
       </article>
     </section>
     <footer class="footer">
-      <span><strong>BNB Smart Chain Mainnet</strong> · Chain ID 56</span>
+      <span><strong>Ethereum Mainnet</strong> · Chain ID 1</span>
       <span>Transactions are signed in your wallet. Never share your recovery phrase or private key.</span>
     </footer>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="abi.js"></script>
   <script>
     (() => {
       "use strict";
 
-      const ADDRESS = "0x7C9ef25dD9e20013d49460e062c5D04976ebd70F";
-      const CHAIN_ID = 56n;
-      const CHAIN_HEX = "0x38";
-      const EXPLORER = "https://bscscan.com";
+      const ADDRESS = "0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514";
+      const CHAIN_ID = 1n;
+      const CHAIN_HEX = "0x1";
+      const CHAIN_NAME = "Ethereum";
+      const RPC_URL = "https://ethereum-rpc.publicnode.com";
       let TOKEN_SYMBOL = "USDT";
-      const CONTRACT_ABI = [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_feeWallet",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [],
-          "name": "EnforcedPause",
-          "type": "error"
-        },
-        {
-          "inputs": [],
-          "name": "ExpectedPause",
-          "type": "error"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnableInvalidOwner",
-          "type": "error"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            }
-          ],
-          "name": "OwnableUnauthorizedAccount",
-          "type": "error"
-        },
-        {
-          "inputs": [],
-          "name": "ReentrancyGuardReentrantCall",
-          "type": "error"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "token",
-              "type": "address"
-            }
-          ],
-          "name": "SafeERC20FailedOperation",
-          "type": "error"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "token",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "totalROI",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "totalLevel",
-              "type": "uint256"
-            }
-          ],
-          "name": "Claimed",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "token",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "packageIndex",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "fee",
-              "type": "uint256"
-            }
-          ],
-          "name": "Deposited",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "token",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "bool",
-              "name": "supported",
-              "type": "bool"
-            }
-          ],
-          "name": "ExtraTokenUpdated",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newFeeWallet",
-              "type": "address"
-            }
-          ],
-          "name": "FeeWalletUpdated",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "downline",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "upline",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "token",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "level",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "name": "LevelCommissionAllocated",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "OwnershipTransferred",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            }
-          ],
-          "name": "Paused",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "referrer",
-              "type": "address"
-            }
-          ],
-          "name": "Registered",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            }
-          ],
-          "name": "Unpaused",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "bool",
-              "name": "status",
-              "type": "bool"
-            }
-          ],
-          "name": "UserBlocked",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "bool",
-              "name": "status",
-              "type": "bool"
-            }
-          ],
-          "name": "UserHeld",
-          "type": "event"
-        },
-        {
-          "inputs": [],
-          "name": "BPS_DIVISOR",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "DEPOSIT_FEE_BPS",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "GC_ADDRESS",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "LEVEL_INCOME_CAP_TOKENS",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "MAX_INVEST",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "MAX_LIFETIME_USER",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "MIN_FIRST_INVEST",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "MIN_REINVEST",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "MONTH",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "MONTHLY_ROI_BPS",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "USDT_BEP20",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "USDT_ERC20",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "USDT_POLYGON",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            }
-          ],
-          "name": "claim",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "_amount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "_referrer",
-              "type": "address"
-            }
-          ],
-          "name": "deposit",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "directCount",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "extraSupportedTokens",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "feeWallet",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_user",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            }
-          ],
-          "name": "getDepositLimits",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "minAmount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "maxAmount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "remainingLifetime",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_user",
-              "type": "address"
-            }
-          ],
-          "name": "getMaxCapMultiplierBps",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_amount",
-              "type": "uint256"
-            }
-          ],
-          "name": "getRequiredApproval",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "totalRequired",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "fee",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            }
-          ],
-          "name": "getTokenDecimals",
-          "outputs": [
-            {
-              "internalType": "uint8",
-              "name": "",
-              "type": "uint8"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_user",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            }
-          ],
-          "name": "getUserInvestments",
-          "outputs": [
-            {
-              "components": [
-                {
-                  "internalType": "uint256",
-                  "name": "packageIndex",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "amount",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "claimedROI",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "claimedLevel",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "pendingROI",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "pendingLevel",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "totalEarned",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "maxCap",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "remainingToEarn",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "lastAccrualTime",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "createdAt",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "bool",
-                  "name": "isCapReached",
-                  "type": "bool"
-                }
-              ],
-              "internalType": "struct Bbillionaire.InvestmentView[]",
-              "name": "",
-              "type": "tuple[]"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_user",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            }
-          ],
-          "name": "getUserSummary",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "totalInvested",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "packageCount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalMaxCap",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalClaimed",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalClaimableNow",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "totalRemainingToEarn",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "directs",
-              "type": "uint256"
-            },
-            {
-              "internalType": "bool",
-              "name": "blocked",
-              "type": "bool"
-            },
-            {
-              "internalType": "bool",
-              "name": "held",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "isBlocked",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "isHeld",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "isRegistered",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            }
-          ],
-          "name": "isSupportedToken",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "levelBps",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "owner",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "pause",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "paused",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "renounceOwnership",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_to",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "_amount",
-              "type": "uint256"
-            }
-          ],
-          "name": "rescueToken",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_token",
-              "type": "address"
-            },
-            {
-              "internalType": "bool",
-              "name": "_supported",
-              "type": "bool"
-            }
-          ],
-          "name": "setExtraSupportedToken",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_feeWallet",
-              "type": "address"
-            }
-          ],
-          "name": "setFeeWallet",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_user",
-              "type": "address"
-            },
-            {
-              "internalType": "bool",
-              "name": "_blocked",
-              "type": "bool"
-            }
-          ],
-          "name": "setUserBlocked",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_user",
-              "type": "address"
-            },
-            {
-              "internalType": "bool",
-              "name": "_held",
-              "type": "bool"
-            }
-          ],
-          "name": "setUserHeld",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "totalDepositedPerToken",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "name": "transferOwnership",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "unpause",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "upline",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "userInvestments",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "claimedROI",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "claimedLevel",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "pendingLevel",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "lastAccrualTime",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "createdAt",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        }
-      ];
+      const CONTRACT_ABI = window.BBILLIONAIRE_ABI;
       const TOKEN_ABI = [
         "function balanceOf(address account) view returns (uint256)",
         "function allowance(address owner,address spender) view returns (uint256)",
@@ -1493,7 +351,7 @@
       const connectButton = $("connect-button");
       const checkButton = $("check-button");
       const investButton = $("invest-button");
-      const claimButton = $("claim-button");
+      const withdrawButton = $("claim-button");
       const refreshButton = $("refresh-button");
       const amountInput = $("amount");
       const statusBox = $("status");
@@ -1505,12 +363,12 @@
       let tokenAddress;
       let tokenDecimals;
       const tokenOptions = {};
-      const readProvider = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org/", 56, { staticNetwork: true });
+      const readProvider = new ethers.JsonRpcProvider(RPC_URL, 1, { staticNetwork: true });
       const readContract = new ethers.Contract(ADDRESS, CONTRACT_ABI, readProvider);
 
       async function loadTokenOptions() {
         if (tokenOptions.USDT && tokenOptions.GC) return;
-        const [usdt, gc] = await Promise.all([readContract.USDT_BEP20(), readContract.GC_ADDRESS()]);
+        const [usdt, gc] = await Promise.all([readContract.USDT_ERC20(), readContract.GC_ADDRESS()]);
         for (const [symbol, address] of [["USDT", usdt], ["GC", gc]]) {
           const checksummed = ethers.getAddress(address);
           const [supported, decimals] = await Promise.all([
@@ -1568,34 +426,20 @@
         return seconds === 0n ? "Unknown" : new Date(Number(seconds) * 1000).toLocaleString();
       }
 
-      async function ensureBsc() {
+      async function ensureChain() {
         if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
         let network = await provider.getNetwork();
         if (network.chainId === CHAIN_ID) return;
-        try {
-          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
-        } catch (error) {
-          if (error.code !== 4902) throw error;
-          await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [{
-              chainId: CHAIN_HEX,
-              chainName: "BNB Smart Chain",
-              nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
-              rpcUrls: ["https://bsc-dataseed.binance.org/"],
-              blockExplorerUrls: [EXPLORER]
-            }]
-          });
-        }
+        await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
         network = await provider.getNetwork();
-        if (network.chainId !== CHAIN_ID) throw new Error("Switch your wallet to BNB Smart Chain Mainnet (chain ID 56).");
+        if (network.chainId !== CHAIN_ID) throw new Error(`Switch your wallet to ${CHAIN_NAME} Mainnet (chain ID 1).`);
       }
 
       async function connect() {
         try {
           if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
           provider = new ethers.BrowserProvider(window.ethereum);
-          await ensureBsc();
+          await ensureChain();
           const accounts = await provider.send("eth_requestAccounts", []);
           if (!accounts.length) throw new Error("The wallet did not provide an account.");
           account = ethers.getAddress(accounts[0]);
@@ -1610,11 +454,10 @@
           connectButton.textContent = `${account.slice(0, 6)}…${account.slice(-4)}`;
           connectButton.title = account;
           $("wallet-hint").textContent = `Connected: ${account}`;
-          $("network-label").textContent = "BNB Smart Chain · Connected";
+          $("network-label").textContent = `${CHAIN_NAME} · Connected`;
           checkButton.disabled = false;
           investButton.disabled = false;
           $("approve-button").disabled = false;
-          claimButton.disabled = false;
           report(`Wallet connected. Confirm each ${TOKEN_SYMBOL} transaction in your wallet.`, "success");
           await refresh();
         } catch (error) {
@@ -1628,7 +471,7 @@
           return;
         }
         try {
-          await ensureBsc();
+          await ensureChain();
           const [balance, summary, holdings, contractBalance] = await Promise.all([
             token.balanceOf(account),
             contract.getUserSummary(account, tokenAddress),
@@ -1639,10 +482,13 @@
           $("contract-balance").textContent = `${formatAmount(contractBalance)} ${TOKEN_SYMBOL}`;
           $("investment-count").textContent = summary.packageCount.toString();
           $("total-invested").textContent = `${formatAmount(summary.totalInvested)} ${TOKEN_SYMBOL}`;
-          $("pending-income").textContent = `${formatAmount(summary.totalClaimableNow)} ${TOKEN_SYMBOL}`;
-          $("next-claim").textContent = `${formatAmount(summary.totalClaimableNow)} ${TOKEN_SYMBOL}`;
-          $("wallet-hint").textContent = `Connected: ${account}${summary.held ? " · Account is held" : ""}${summary.blocked ? " · Account is blocked" : ""}`;
-          claimButton.disabled = Boolean(summary.held || summary.blocked || summary.totalClaimableNow === 0n);
+          $("pending-income").textContent = `${formatAmount(summary.totalAccruedUnclaimed)} ${TOKEN_SYMBOL}`;
+          $("next-claim").textContent = `${formatAmount(summary.totalAccruedUnclaimed)} ${TOKEN_SYMBOL}`;
+          const cooldown = summary.canWithdrawNow || summary.lastWithdrawTime === 0n
+            ? ""
+            : ` · Next withdrawal: ${formatTimestamp(summary.nextWithdrawTime)}`;
+          $("wallet-hint").textContent = `Connected: ${account}${summary.held ? " · Account is held" : ""}${summary.blocked ? " · Account is blocked" : ""}${cooldown}`;
+          withdrawButton.disabled = Boolean(summary.held || summary.blocked || !summary.canWithdrawNow || summary.totalAccruedUnclaimed === 0n);
           const rows = [];
           const events = [];
           for (const investment of holdings) {
@@ -1654,15 +500,15 @@
             if (available > 0n) {
               events.push({
                 time: null,
-                text: `Claimable on #${investment.packageIndex}: <strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong>`
+                text: `Accrued on #${investment.packageIndex}: <strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong>`
               });
             }
             rows.push(
-              `<div class="investment-row"><span>#${investment.packageIndex}</span><span>Deposit<br><strong>${formatAmount(investment.amount)} ${TOKEN_SYMBOL}</strong></span><span>Earned<br><strong>${formatAmount(investment.totalEarned)} ${TOKEN_SYMBOL}</strong></span><span>Claimable<br><strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong></span></div>`
+              `<div class="investment-row"><span>#${investment.packageIndex}</span><span>Deposit<br><strong>${formatAmount(investment.amount)} ${TOKEN_SYMBOL}</strong></span><span>Earned<br><strong>${formatAmount(investment.totalEarned)} ${TOKEN_SYMBOL}</strong></span><span>Accrued<br><strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong></span></div>`
             );
           }
           events.push(
-            { time: null, text: `Total claimed: <strong>${formatAmount(summary.totalClaimed)} ${TOKEN_SYMBOL}</strong>` },
+            { time: null, text: `Total withdrawn: <strong>${formatAmount(summary.totalWithdrawn)} ${TOKEN_SYMBOL}</strong>` },
             { time: null, text: `Remaining earning cap: <strong>${formatAmount(summary.totalRemainingToEarn)} ${TOKEN_SYMBOL}</strong>` },
             { time: null, text: `Direct referrals: <strong>${summary.directs}</strong>` },
             { time: null, text: `Status: <strong>${summary.blocked ? "Blocked" : summary.held ? "Held" : "Active"}</strong>` }
@@ -1692,7 +538,7 @@
 
       async function getInvestmentDetails() {
         if (!contract || !token || !account) throw new Error("Connect your wallet first.");
-        await ensureBsc();
+        await ensureChain();
         const amount = parsedInvestmentAmount();
         const [limits, cost, balance, allowance] = await Promise.all([
           contract.getDepositLimits(account, tokenAddress),
@@ -1727,7 +573,7 @@
         }
       }
 
-      async function approveUsdt() {
+      async function approveToken() {
         try {
           if (!signer) throw new Error("Connect your wallet first.");
           const details = await getInvestmentDetails();
@@ -1735,7 +581,7 @@
           const approval = await token.approve(ADDRESS, details.cost.totalRequired);
           report(`Approval submitted: ${approval.hash}. Waiting for confirmation…`);
           await approval.wait();
-          report(`${TOKEN_SYMBOL} approved. You can now click Invest.`, "success");
+          report(`${TOKEN_SYMBOL} approved. You can now click Deposit.`, "success");
           await checkInvestment();
         } catch (error) {
           report(explainError(error), "error");
@@ -1756,7 +602,7 @@
           }
           report("Submitting deposit. Confirm the transaction in your wallet.", "");
           const transaction = await contract.deposit(tokenAddress, details.amount, referrer);
-          report(`Investment submitted: ${transaction.hash}. Waiting for confirmation…`);
+          report(`Deposit submitted: ${transaction.hash}. Waiting for confirmation…`);
           await transaction.wait();
           report(`Deposit confirmed. Transaction: ${transaction.hash}`, "success");
           $("check-result").textContent = "";
@@ -1766,15 +612,15 @@
         }
       }
 
-      async function claim() {
+      async function withdraw() {
         try {
           if (!contract) throw new Error("Connect your wallet first.");
-          await ensureBsc();
-          report("Submitting claim. Confirm the transaction in your wallet.", "");
-          const transaction = await contract.claim(tokenAddress);
-          report(`Claim submitted: ${transaction.hash}. Waiting for confirmation…`);
+          await ensureChain();
+          report("Submitting withdrawal. Confirm the transaction in your wallet.", "");
+          const transaction = await contract.withdraw(tokenAddress);
+          report(`Withdrawal submitted: ${transaction.hash}. Waiting for confirmation…`);
           await transaction.wait();
-          report(`Claim confirmed. Transaction: ${transaction.hash}`, "success");
+          report(`Withdrawal confirmed. Transaction: ${transaction.hash}`, "success");
           await refresh();
         } catch (error) {
           report(explainError(error), "error");
@@ -1784,10 +630,9 @@
       connectButton.addEventListener("click", connect);
       checkButton.addEventListener("click", checkInvestment);
       investButton.addEventListener("click", invest);
-      $("approve-button").addEventListener("click", approveUsdt);
-      claimButton.addEventListener("click", claim);
+      $("approve-button").addEventListener("click", approveToken);
+      withdrawButton.addEventListener("click", withdraw);
       refreshButton.addEventListener("click", refresh);
-
       document.querySelectorAll("[data-token]").forEach(button => {
         button.addEventListener("click", () => selectToken(button.dataset.token));
       });

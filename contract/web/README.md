@@ -1,12 +1,12 @@
 # Bbillionaire dApp
 
-This static wallet interface connects to the contract deployed at `0x7C9ef25dD9e20013d49460e062c5D04976ebd70F` on BNB Smart Chain Mainnet and uses the contract's `USDT_BEP20` token. It reads account balances, deposit limits, investments, and claimable income; requests a USDT allowance when needed; and supports deposits and claims.
+This static wallet interface connects to the contract deployed at `0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514` on Ethereum Mainnet (chain ID 1) and supports the contract's `USDT_ERC20` and `GC_ADDRESS` tokens. It reads account balances, deposit limits, investments, and accrued income; requests a token allowance when needed; and supports deposits and withdrawals. The contract ABI lives in `abi.js`.
 
 ## Before publishing
 
-1. Verify the contract address, network, USDT token address, and deployed bytecode on [BscScan](https://bscscan.com/address/0x7C9ef25dD9e20013d49460e062c5D04976ebd70F).
+1. Verify the contract address, network, token addresses, and deployed bytecode on [Etherscan](https://etherscan.io/address/0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514).
 2. The Solidity source in `../contracts/Bbillionaire.sol` does **not** match the ABI supplied for this interface. Do not publish this interface for transactions until you confirm the deployed bytecode at the address matches the supplied ABI.
-3. Review the deposit, approval, referral, and claim behavior on BNB Smart Chain Mainnet before inviting users.
+3. Review the deposit, approval, referral, and withdrawal behavior on Ethereum Mainnet before inviting users.
 
 ## GitHub Pages deployment
 
