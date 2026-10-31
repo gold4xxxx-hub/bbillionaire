@@ -228,8 +228,8 @@
         </div>
       </div>
       <div class="wallet">
-        <span class="network" id="network-label">Ethereum</span>
-        <a class="explorer-link" href="https://etherscan.io/address/0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514" target="_blank" rel="noopener">View contract ↗</a>
+        <span class="network" id="network-label">BNB Smart Chain</span>
+        <a class="explorer-link" href="https://bscscan.com/address/0x1A7310ab93e00DB7D7b4523251967ccf13018261" target="_blank" rel="noopener">View contract ↗</a>
         <button id="connect-button" type="button">Connect wallet</button>
       </div>
     </header>
@@ -238,14 +238,14 @@
 
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">Bbillionaire · Ethereum</p>
+        <p class="eyebrow">Bbillionaire · BNB Smart Chain</p>
         <h2 id="hero-title">Your on-chain finances,<br><span>in one clear view.</span></h2>
         <p class="hero-description">Track your USDT and GC deposits, monitor accrued income, and manage your account directly from your connected wallet.</p>
       </div>
       <div class="hero-aside">
         <p class="hero-aside-label">Contract address</p>
-        <code class="hero-contract">0x685F…ED514</code>
-        <a class="hero-explorer" href="https://etherscan.io/address/0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514" target="_blank" rel="noopener">Explore on Etherscan</a>
+        <code class="hero-contract">0x1A73…18261</code>
+        <a class="hero-explorer" href="https://bscscan.com/address/0x1A7310ab93e00DB7D7b4523251967ccf13018261" target="_blank" rel="noopener">Explore on BscScan</a>
       </div>
     </section>
 
@@ -304,7 +304,7 @@
           <button id="claim-button" type="button" disabled>Withdraw</button>
           <button id="refresh-button" class="secondary" type="button">Refresh</button>
         </div>
-        <p class="hint wallet-hint" id="wallet-hint">Connect a wallet on Ethereum to load your account.</p>
+        <p class="hint wallet-hint" id="wallet-hint">Connect a wallet on BNB Smart Chain to load your account.</p>
       </article>
     </section>
 
@@ -323,7 +323,7 @@
       </article>
     </section>
     <footer class="footer">
-      <span><strong>Ethereum Mainnet</strong> · Chain ID 1</span>
+      <span><strong>BNB Smart Chain Mainnet</strong> · Chain ID 56</span>
       <span>Transactions are signed in your wallet. Never share your recovery phrase or private key.</span>
     </footer>
   </main>
@@ -334,11 +334,11 @@
     (() => {
       "use strict";
 
-      const ADDRESS = "0x685F81de76BdabE79d8Ea5804EeA3c6E711ED514";
-      const CHAIN_ID = 1n;
-      const CHAIN_HEX = "0x1";
-      const CHAIN_NAME = "Ethereum";
-      const RPC_URL = "https://ethereum-rpc.publicnode.com";
+      const ADDRESS = "0x1A7310ab93e00DB7D7b4523251967ccf13018261";
+      const CHAIN_ID = 56n;
+      const CHAIN_HEX = "0x38";
+      const CHAIN_NAME = "BNB Smart Chain";
+      const RPC_URL = "https://bsc-dataseed.binance.org/";
       let TOKEN_SYMBOL = "USDT";
       const CONTRACT_ABI = window.BBILLIONAIRE_ABI;
       const TOKEN_ABI = [
@@ -363,12 +363,12 @@
       let tokenAddress;
       let tokenDecimals;
       const tokenOptions = {};
-      const readProvider = new ethers.JsonRpcProvider(RPC_URL, 1, { staticNetwork: true });
+      const readProvider = new ethers.JsonRpcProvider(RPC_URL, 56, { staticNetwork: true });
       const readContract = new ethers.Contract(ADDRESS, CONTRACT_ABI, readProvider);
 
       async function loadTokenOptions() {
         if (tokenOptions.USDT && tokenOptions.GC) return;
-        const [usdt, gc] = await Promise.all([readContract.USDT_ERC20(), readContract.GC_ADDRESS()]);
+        const [usdt, gc] = await Promise.all([readContract.USDT_BEP20(), readContract.GC_ADDRESS()]);
         for (const [symbol, address] of [["USDT", usdt], ["GC", gc]]) {
           const checksummed = ethers.getAddress(address);
           const [supported, decimals] = await Promise.all([
@@ -430,9 +430,23 @@
         if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
         let network = await provider.getNetwork();
         if (network.chainId === CHAIN_ID) return;
-        await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
+        try {
+          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
+        } catch (error) {
+          if (error.code !== 4902) throw error;
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: CHAIN_HEX,
+              chainName: CHAIN_NAME,
+              nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+              rpcUrls: [RPC_URL],
+              blockExplorerUrls: ["https://bscscan.com"]
+            }]
+          });
+        }
         network = await provider.getNetwork();
-        if (network.chainId !== CHAIN_ID) throw new Error(`Switch your wallet to ${CHAIN_NAME} Mainnet (chain ID 1).`);
+        if (network.chainId !== CHAIN_ID) throw new Error(`Switch your wallet to ${CHAIN_NAME} Mainnet (chain ID 56).`);
       }
 
       async function connect() {
