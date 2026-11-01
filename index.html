@@ -4,36 +4,672 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1018">
-  <title>Bbillionaire</title>
+  <title>Bbillionaire | USDT</title>
   <style>
-    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; --gold: #e8bd72; }
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1018;
+      color: #f5f2e9;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --surface: #121923;
+      --surface-raised: #171f2b;
+      --border: rgba(224, 232, 241, .09);
+      --muted: #8d99a9;
+      --gold: #e8bd72;
+      --green: #9de0bd;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-width: 320px;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      color: #f5f2e9;
       background:
         radial-gradient(ellipse at 82% 4%, rgba(114, 91, 54, .14), transparent 34rem),
         radial-gradient(ellipse at 4% 32%, rgba(43, 74, 69, .1), transparent 32rem),
         #0b1018;
     }
-    main { width: 100%; max-width: 520px; text-align: center; border: 1px solid rgba(232, 189, 114, .13); border-radius: 22px; background: linear-gradient(145deg, #171d25, #131a23); padding: 44px 28px; }
-    .mark { display: grid; width: 52px; height: 52px; margin: 0 auto 20px; place-items: center; border: 1px solid rgba(232, 189, 114, .34); border-radius: 16px; background: linear-gradient(145deg, rgba(232, 189, 114, .2), rgba(232, 189, 114, .04)); color: var(--gold); font-size: 23px; font-weight: 850; }
-    h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: -.03em; }
-    .caption { margin: 0 0 22px; color: #7e8998; font-size: 10px; font-weight: 750; letter-spacing: .14em; }
-    p { margin: 0; color: #9ba5b2; font-size: 14px; line-height: 1.65; }
+    button, input { font: inherit; }
+    button {
+      border: 0;
+      border-radius: 11px;
+      background: var(--gold);
+      color: #1a1711;
+      cursor: pointer;
+      font-weight: 750;
+      padding: 12px 18px;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    button:hover:not(:disabled) { background: #f3d396; transform: translateY(-1px); }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    button:disabled { cursor: not-allowed; opacity: .4; }
+    button.secondary { border: 1px solid var(--border); background: #202a37; color: #e8edf4; }
+    button.secondary:hover:not(:disabled) { border-color: rgba(232, 189, 114, .45); background: #283442; }
+    input {
+      width: 100%;
+      border: 1px solid rgba(224, 232, 241, .12);
+      border-radius: 11px;
+      background: #0d141e;
+      color: #f5f2e9;
+      padding: 14px;
+    }
+    input:focus { border-color: rgba(232, 189, 114, .7); }
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { color: #f3d396; }
+    .shell { max-width: 1160px; margin: 0 auto; padding: 0 28px 52px; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 82px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid rgba(232, 189, 114, .34);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(232, 189, 114, .2), rgba(232, 189, 114, .04));
+      color: var(--gold);
+      font-size: 19px;
+      font-weight: 850;
+    }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 3px; font-size: 17px; letter-spacing: -.025em; }
+    .brand-caption { margin: 0; color: #7e8998; font-size: 10px; font-weight: 750; letter-spacing: .14em; }
+    .wallet { display: flex; align-items: center; gap: 11px; }
+    .network {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(157, 224, 189, .16);
+      border-radius: 999px;
+      background: rgba(91, 158, 118, .08);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .035em;
+      padding: 9px 12px;
+      white-space: nowrap;
+    }
+    .network::before { width: 6px; height: 6px; border-radius: 50%; background: #77d7a2; content: ""; box-shadow: 0 0 12px rgba(119, 215, 162, .7); }
+    .explorer-link { color: #abb5c2; font-size: 12px; }
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      align-items: center;
+      gap: 32px;
+      min-height: 230px;
+      margin-bottom: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(232, 189, 114, .13);
+      border-radius: 22px;
+      background:
+        radial-gradient(ellipse at 78% 50%, rgba(177, 132, 65, .18), transparent 19rem),
+        linear-gradient(112deg, #171d25 0%, #171c23 56%, #202119 100%);
+      padding: 36px 40px;
+    }
+    .hero::after {
+      position: absolute;
+      top: -145px;
+      right: 92px;
+      width: 350px;
+      height: 350px;
+      border: 1px solid rgba(232, 189, 114, .08);
+      border-radius: 50%;
+      content: "";
+      box-shadow: 0 0 0 30px rgba(232, 189, 114, .025), 0 0 0 60px rgba(232, 189, 114, .02);
+      pointer-events: none;
+    }
+    .hero-copy, .hero-aside { position: relative; z-index: 1; }
+    .eyebrow { margin-bottom: 16px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+    .hero h2 { max-width: 610px; margin-bottom: 12px; font-size: clamp(30px, 4vw, 46px); font-weight: 620; letter-spacing: -.055em; line-height: 1.08; }
+    .hero h2 span { color: var(--gold); }
+    .hero-description { max-width: 470px; margin: 0; color: #9ba5b2; font-size: 14px; line-height: 1.65; }
+    .hero-aside { border-left: 1px solid rgba(232, 189, 114, .19); padding-left: 25px; }
+    .hero-aside-label { margin-bottom: 10px; color: #919ba7; font-size: 11px; }
+    .hero-contract { display: block; margin-bottom: 16px; color: #e4e6e1; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+    .hero-explorer { display: inline-flex; align-items: center; gap: 7px; color: var(--gold); font-size: 12px; font-weight: 700; }
+    .hero-explorer::after { content: "↗"; font-size: 15px; }
+    .status { display: none; margin: 0 0 18px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 12px; background: #151d28; color: #dce5fa; font-size: 13px; overflow-wrap: anywhere; }
+    .status.show { display: block; }
+    .status.error { border-color: rgba(239, 112, 132, .32); background: rgba(93, 34, 45, .26); color: #ffc4ce; }
+    .status.success { border-color: rgba(119, 215, 162, .28); background: rgba(31, 83, 55, .22); color: #baf0ce; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin: 0 0 12px; }
+    .section-heading h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 11px; }
+    .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .card { border: 1px solid var(--border); border-radius: 16px; background: linear-gradient(145deg, rgba(22, 30, 41, .96), rgba(17, 24, 34, .96)); padding: 19px; }
+    .metric-card { position: relative; min-height: 110px; overflow: hidden; }
+    .metric-card::after { position: absolute; right: 17px; bottom: -31px; width: 78px; height: 78px; border: 1px solid rgba(232, 189, 114, .1); border-radius: 50%; content: ""; }
+    .metric-label { color: #929eac; font-size: 11px; font-weight: 600; letter-spacing: .025em; }
+    .metric-value { margin-top: 13px; color: #f3f1e9; font-size: clamp(20px, 2.4vw, 26px); font-weight: 650; letter-spacing: -.045em; overflow-wrap: anywhere; }
+    .metric-card:first-child .metric-value { color: var(--gold); }
+    .columns { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 14px; margin-top: 22px; }
+    .panel { padding: 24px; }
+    .panel-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 19px; }
+    .panel h2 { margin: 0 0 6px; font-size: 18px; font-weight: 650; letter-spacing: -.035em; }
+    .card-description { margin: 0; color: #8d99a9; font-size: 12px; line-height: 1.6; }
+    .token-switch { display: inline-flex; gap: 4px; padding: 3px; border: 1px solid rgba(232, 189, 114, .18); border-radius: 999px; background: rgba(232, 189, 114, .06); }
+    .token-tab { width: auto; min-height: 0; border: 0; border-radius: 999px; background: transparent; color: #e6c989; font-size: 11px; font-weight: 750; padding: 6px 14px; cursor: pointer; box-shadow: none; }
+    .token-tab.active { background: #e8bd72; color: #101827; }
+    .token-pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(232, 189, 114, .18); border-radius: 999px; background: rgba(232, 189, 114, .06); color: #e6c989; font-size: 10px; font-weight: 750; padding: 7px 10px; white-space: nowrap; }
+    .token-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+    label { display: block; margin: 16px 0 7px; color: #c3cad2; font-size: 11px; font-weight: 650; }
+    .input-shell { position: relative; }
+    .input-shell input { padding-right: 72px; }
+    .input-suffix { position: absolute; top: 50%; right: 14px; color: var(--gold); font-size: 11px; font-weight: 750; transform: translateY(-50%); }
+    .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+    .actions button { flex: 1 1 auto; min-height: 43px; font-size: 12px; }
+    .hint { min-height: 18px; margin: 11px 0 0; color: #929eac; font-size: 11px; line-height: 1.55; }
+    .claim-panel { display: flex; flex-direction: column; }
+    .claim-display { margin: auto 0 0; border: 1px solid rgba(157, 224, 189, .12); border-radius: 13px; background: linear-gradient(135deg, rgba(56, 103, 77, .12), rgba(24, 38, 34, .12)); padding: 18px; }
+    .claim-display .metric-value { margin-top: 8px; color: var(--green); font-size: clamp(24px, 3vw, 31px); }
+    .claim-actions { margin-top: 14px; }
+    .wallet-hint { margin-top: 12px; }
+    .lists { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 14px; margin-top: 14px; }
+    .list-card { min-width: 0; }
+    .list-card .section-heading { align-items: flex-start; margin-bottom: 16px; }
+    .investment-row { display: grid; grid-template-columns: 38px repeat(3, minmax(0, 1fr)); gap: 10px; padding: 13px 0; border-top: 1px solid var(--border); color: #bec7d1; font-size: 11px; line-height: 1.6; }
+    .investment-row span:first-child { color: var(--gold); font-weight: 700; }
+    .investment-row strong { color: #eef0ea; font-weight: 650; }
+    .empty { padding: 18px 0 2px; color: var(--muted); font-size: 12px; }
+    .footer { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; color: #778393; font-size: 10px; line-height: 1.6; }
+    .footer strong { color: #a9b3bf; font-weight: 600; }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: minmax(0, 1fr) 220px; gap: 20px; padding: 30px; }
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .columns { grid-template-columns: minmax(0, 1fr) minmax(270px, .85fr); }
+      .panel { padding: 19px; }
+    }
+    @media (max-width: 680px) {
+      .shell { padding: 0 17px 36px; }
+      header { min-height: 72px; margin-bottom: 20px; }
+      .network { display: none; }
+      .hero { grid-template-columns: 1fr; gap: 23px; min-height: 0; padding: 27px 24px; }
+      .hero-aside { border-top: 1px solid rgba(232, 189, 114, .19); border-left: 0; padding: 16px 0 0; }
+      .hero-contract { display: inline-block; margin: 0 12px 0 0; }
+      .hero::after { right: -120px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .metric-card { min-height: 100px; padding: 15px; }
+      .columns, .lists { grid-template-columns: 1fr; }
+      .claim-display { margin-top: 10px; }
+      .footer { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .shell { padding-right: 12px; padding-left: 12px; }
+      .wallet { gap: 7px; }
+      .wallet button { padding: 10px 12px; font-size: 11px; }
+      .explorer-link { font-size: 10px; }
+      .hero { padding: 24px 19px; }
+      .panel { padding: 17px; }
+      .actions button { flex-basis: 100%; }
+      .investment-row { grid-template-columns: 30px repeat(3, minmax(0, 1fr)); gap: 7px; font-size: 10px; }
+      .investment-row[style*="170px"] { grid-template-columns: 95px 1fr !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <div class="mark" aria-hidden="true">B</div>
-    <h1>Bbillionaire</h1>
-    <p class="caption">ON-CHAIN DASHBOARD</p>
-    <p>The dashboard is being updated. Please check back soon.</p>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">B</div>
+        <div>
+          <h1>Bbillionaire</h1>
+          <p class="brand-caption">ON-CHAIN DASHBOARD</p>
+        </div>
+      </div>
+      <div class="wallet">
+        <span class="network" id="network-label">BNB Smart Chain</span>
+        <a class="explorer-link" href="https://bscscan.com/address/0x7C9ef25dD9e20013d49460e062c5D04976ebd70F" target="_blank" rel="noopener">View contract ↗</a>
+        <button id="connect-button" type="button">Connect wallet</button>
+      </div>
+    </header>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Bbillionaire · BNB Smart Chain</p>
+        <h2 id="hero-title">Your on-chain finances,<br><span>in one clear view.</span></h2>
+        <p class="hero-description">Track your USDT deposits, monitor claimable income, and manage your account directly from your connected wallet.</p>
+      </div>
+      <div class="hero-aside">
+        <p class="hero-aside-label">Contract address</p>
+        <code class="hero-contract">0x7C9e…ebd70F</code>
+        <a class="hero-explorer" href="https://bscscan.com/address/0x7C9ef25dD9e20013d49460e062c5D04976ebd70F" target="_blank" rel="noopener">Explore on BscScan</a>
+      </div>
+    </section>
+
+    <div class="section-heading">
+      <h2>Account overview</h2>
+      <p>Balances update from the connected wallet</p>
+    </div>
+    <section class="grid" aria-label="Account overview">
+      <article class="card metric-card"><div class="metric-label">Contract <span class="sym">USDT</span> balance</div><div class="metric-value" id="contract-balance">Loading…</div></article>
+      <article class="card metric-card"><div class="metric-label">Your <span class="sym">USDT</span> balance</div><div class="metric-value" id="token-balance">—</div></article>
+      <article class="card metric-card"><div class="metric-label">Total deposited</div><div class="metric-value" id="total-invested">—</div></article>
+      <article class="card metric-card"><div class="metric-label">Pending income</div><div class="metric-value" id="pending-income">—</div></article>
+      <article class="card metric-card"><div class="metric-label">Deposits</div><div class="metric-value" id="investment-count">—</div></article>
+    </section>
+
+    <section class="columns">
+      <article class="card panel">
+        <div class="panel-header">
+          <div>
+            <h2>Make a deposit</h2>
+            <p class="card-description">Choose an amount and review the fee before confirming in your wallet.</p>
+          </div>
+          <div class="token-switch" role="group" aria-label="Choose token">
+            <button type="button" class="token-tab active" data-token="USDT" aria-pressed="true">USDT</button>
+            <button type="button" class="token-tab" data-token="GC" aria-pressed="false">GC</button>
+          </div>
+        </div>
+        <label for="amount">Deposit amount</label>
+        <div class="input-shell">
+          <input id="amount" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00">
+          <span class="input-suffix sym">USDT</span>
+        </div>
+        <label for="referrer">Referrer address (optional)</label>
+        <input id="referrer" type="text" autocomplete="off" placeholder="0x...">
+        <div class="actions">
+          <button id="check-button" class="secondary" type="button" disabled>Review deposit</button>
+          <button id="approve-button" class="secondary" type="button" disabled>Approve <span class="sym">USDT</span></button>
+          <button id="invest-button" type="button" disabled>Deposit <span class="sym">USDT</span></button>
+        </div>
+        <p id="check-result" class="hint" aria-live="polite"></p>
+      </article>
+
+      <article class="card panel claim-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Claim income</h2>
+            <p class="card-description">Available rewards from your deposits.</p>
+          </div>
+          <span class="token-pill">REWARDS</span>
+        </div>
+        <div class="claim-display">
+          <div class="metric-label">Available to claim</div>
+          <div class="metric-value" id="next-claim">—</div>
+        </div>
+        <div class="actions claim-actions">
+          <button id="claim-button" type="button" disabled>Claim</button>
+          <button id="refresh-button" class="secondary" type="button">Refresh</button>
+        </div>
+        <p class="hint wallet-hint" id="wallet-hint">Connect a wallet on BNB Smart Chain to load your account.</p>
+      </article>
+    </section>
+
+    <section class="lists">
+      <article class="card panel list-card">
+        <div class="section-heading">
+          <div><h2>Your deposits</h2><p>Package balances and available rewards</p></div>
+        </div>
+        <div id="investments"><p class="empty">Connect your wallet to view deposits.</p></div>
+      </article>
+      <article class="card panel list-card">
+        <div class="section-heading">
+          <div><h2>Account activity</h2><p>Account details read from the contract</p></div>
+        </div>
+        <div id="activity"><p class="empty">Connect your wallet to view activity.</p></div>
+      </article>
+    </section>
+    <footer class="footer">
+      <span><strong>BNB Smart Chain Mainnet</strong> · Chain ID 56</span>
+      <span>Transactions are signed in your wallet. Never share your recovery phrase or private key.</span>
+    </footer>
   </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const ADDRESS = "0x7C9ef25dD9e20013d49460e062c5D04976ebd70F";
+      const CHAIN_ID = 56n;
+      const CHAIN_HEX = "0x38";
+      const EXPLORER = "https://bscscan.com";
+      let TOKEN_SYMBOL = "USDT";
+      const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_feeWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"EnforcedPause","type":"error"},{"inputs":[],"name":"ExpectedPause","type":"error"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[],"name":"ReentrancyGuardReentrantCall","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalROI","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"totalLevel","type":"uint256"}],"name":"Claimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"packageIndex","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"Deposited","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"bool","name":"supported","type":"bool"}],"name":"ExtraTokenUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newFeeWallet","type":"address"}],"name":"FeeWalletUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"downline","type":"address"},{"indexed":true,"internalType":"address","name":"upline","type":"address"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"LevelCommissionAllocated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"}],"name":"Registered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"status","type":"bool"}],"name":"UserBlocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"status","type":"bool"}],"name":"UserHeld","type":"event"},{"inputs":[],"name":"BPS_DIVISOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DEPOSIT_FEE_BPS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"GC_ADDRESS","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"LEVEL_INCOME_CAP_TOKENS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_INVEST","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_LIFETIME_USER","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_FIRST_INVEST","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_REINVEST","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MONTH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MONTHLY_ROI_BPS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"USDT_BEP20","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"USDT_ERC20","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"USDT_POLYGON","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_referrer","type":"address"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"directCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"extraSupportedTokens","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"feeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"address","name":"_token","type":"address"}],"name":"getDepositLimits","outputs":[{"internalType":"uint256","name":"minAmount","type":"uint256"},{"internalType":"uint256","name":"maxAmount","type":"uint256"},{"internalType":"uint256","name":"remainingLifetime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getMaxCapMultiplierBps","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"getRequiredApproval","outputs":[{"internalType":"uint256","name":"totalRequired","type":"uint256"},{"internalType":"uint256","name":"fee","type":"uint256"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"name":"getTokenDecimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"address","name":"_token","type":"address"}],"name":"getUserInvestments","outputs":[{"components":[{"internalType":"uint256","name":"packageIndex","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"claimedROI","type":"uint256"},{"internalType":"uint256","name":"claimedLevel","type":"uint256"},{"internalType":"uint256","name":"pendingROI","type":"uint256"},{"internalType":"uint256","name":"pendingLevel","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"maxCap","type":"uint256"},{"internalType":"uint256","name":"remainingToEarn","type":"uint256"},{"internalType":"uint256","name":"lastAccrualTime","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"},{"internalType":"bool","name":"isCapReached","type":"bool"}],"internalType":"struct Bbillionaire.InvestmentView[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"address","name":"_token","type":"address"}],"name":"getUserSummary","outputs":[{"internalType":"uint256","name":"totalInvested","type":"uint256"},{"internalType":"uint256","name":"packageCount","type":"uint256"},{"internalType":"uint256","name":"totalMaxCap","type":"uint256"},{"internalType":"uint256","name":"totalClaimed","type":"uint256"},{"internalType":"uint256","name":"totalClaimableNow","type":"uint256"},{"internalType":"uint256","name":"totalRemainingToEarn","type":"uint256"},{"internalType":"uint256","name":"directs","type":"uint256"},{"internalType":"bool","name":"blocked","type":"bool"},{"internalType":"bool","name":"held","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"isBlocked","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"isHeld","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"isRegistered","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"name":"isSupportedToken","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"levelBps","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"rescueToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"bool","name":"_supported","type":"bool"}],"name":"setExtraSupportedToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_feeWallet","type":"address"}],"name":"setFeeWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"bool","name":"_blocked","type":"bool"}],"name":"setUserBlocked","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"bool","name":"_held","type":"bool"}],"name":"setUserHeld","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"totalDepositedPerToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"upline","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"userInvestments","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"claimedROI","type":"uint256"},{"internalType":"uint256","name":"claimedLevel","type":"uint256"},{"internalType":"uint256","name":"pendingLevel","type":"uint256"},{"internalType":"uint256","name":"lastAccrualTime","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"}],"stateMutability":"view","type":"function"}];
+      const TOKEN_ABI = [
+        "function balanceOf(address account) view returns (uint256)",
+        "function allowance(address owner,address spender) view returns (uint256)",
+        "function approve(address spender,uint256 amount) returns (bool)"
+      ];
+
+      const $ = (id) => document.getElementById(id);
+      const connectButton = $("connect-button");
+      const checkButton = $("check-button");
+      const investButton = $("invest-button");
+      const claimButton = $("claim-button");
+      const refreshButton = $("refresh-button");
+      const amountInput = $("amount");
+      const statusBox = $("status");
+      let provider;
+      let signer;
+      let account;
+      let contract;
+      let token;
+      let tokenAddress;
+      let tokenDecimals;
+      const tokenOptions = {};
+      const readProvider = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org/", 56, { staticNetwork: true });
+      const readContract = new ethers.Contract(ADDRESS, CONTRACT_ABI, readProvider);
+
+      async function loadTokenOptions() {
+        if (tokenOptions.USDT && tokenOptions.GC) return;
+        const [usdt, gc] = await Promise.all([readContract.USDT_BEP20(), readContract.GC_ADDRESS()]);
+        for (const [symbol, address] of [["USDT", usdt], ["GC", gc]]) {
+          const checksummed = ethers.getAddress(address);
+          const [supported, decimals] = await Promise.all([
+            readContract.isSupportedToken(checksummed),
+            readContract.getTokenDecimals(checksummed)
+          ]);
+          if (supported) tokenOptions[symbol] = { address: checksummed, decimals: Number(decimals) };
+        }
+      }
+
+      function applyTokenLabels() {
+        document.querySelectorAll(".sym").forEach(el => { el.textContent = TOKEN_SYMBOL; });
+        document.querySelectorAll("[data-token]").forEach(el => {
+          const active = el.dataset.token === TOKEN_SYMBOL;
+          el.classList.toggle("active", active);
+          el.setAttribute("aria-pressed", String(active));
+        });
+        document.title = `Bbillionaire | ${TOKEN_SYMBOL}`;
+      }
+
+      async function selectToken(symbol) {
+        try {
+          await loadTokenOptions();
+          const option = tokenOptions[symbol];
+          if (!option) throw new Error(`${symbol} is not supported by the contract.`);
+          TOKEN_SYMBOL = symbol;
+          tokenAddress = option.address;
+          tokenDecimals = option.decimals;
+          token = new ethers.Contract(tokenAddress, TOKEN_ABI, signer || readProvider);
+          $("check-result").textContent = "";
+          applyTokenLabels();
+          await Promise.all([loadContractBalance(), refresh()]);
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      function report(message, kind) {
+        statusBox.textContent = message;
+        statusBox.className = `status show${kind ? ` ${kind}` : ""}`;
+      }
+
+      function explainError(error) {
+        return error?.shortMessage || error?.reason || error?.data?.message || error?.message || "An unexpected error occurred.";
+      }
+
+      function formatAmount(value) {
+        return ethers.formatUnits(value, tokenDecimals ?? 18)
+          .replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")
+          .replace(/\.$/, "")
+          .slice(0, 32) || "0";
+      }
+
+      function formatTimestamp(seconds) {
+        return seconds === 0n ? "Unknown" : new Date(Number(seconds) * 1000).toLocaleString();
+      }
+
+      async function ensureBsc() {
+        if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
+        let network = await provider.getNetwork();
+        if (network.chainId === CHAIN_ID) return;
+        try {
+          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN_HEX }] });
+        } catch (error) {
+          if (error.code !== 4902) throw error;
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: CHAIN_HEX,
+              chainName: "BNB Smart Chain",
+              nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+              rpcUrls: ["https://bsc-dataseed.binance.org/"],
+              blockExplorerUrls: [EXPLORER]
+            }]
+          });
+        }
+        network = await provider.getNetwork();
+        if (network.chainId !== CHAIN_ID) throw new Error("Switch your wallet to BNB Smart Chain Mainnet (chain ID 56).");
+      }
+
+      async function connect() {
+        try {
+          if (!window.ethereum) throw new Error("No browser wallet found. Install a compatible wallet such as MetaMask.");
+          provider = new ethers.BrowserProvider(window.ethereum);
+          await ensureBsc();
+          const accounts = await provider.send("eth_requestAccounts", []);
+          if (!accounts.length) throw new Error("The wallet did not provide an account.");
+          account = ethers.getAddress(accounts[0]);
+          signer = await provider.getSigner();
+          contract = new ethers.Contract(ADDRESS, CONTRACT_ABI, signer);
+          await loadTokenOptions();
+          const option = tokenOptions[TOKEN_SYMBOL];
+          if (!option) throw new Error(`The contract does not support ${TOKEN_SYMBOL}.`);
+          tokenAddress = option.address;
+          tokenDecimals = option.decimals;
+          token = new ethers.Contract(tokenAddress, TOKEN_ABI, signer);
+          connectButton.textContent = `${account.slice(0, 6)}…${account.slice(-4)}`;
+          connectButton.title = account;
+          $("wallet-hint").textContent = `Connected: ${account}`;
+          $("network-label").textContent = "BNB Smart Chain · Connected";
+          checkButton.disabled = false;
+          investButton.disabled = false;
+          $("approve-button").disabled = false;
+          claimButton.disabled = false;
+          report(`Wallet connected. Confirm each ${TOKEN_SYMBOL} transaction in your wallet.`, "success");
+          await refresh();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      async function refresh() {
+        if (!account || !contract || !token) {
+          if (!window.ethereum) report("No browser wallet detected. Install a compatible wallet to connect.");
+          return;
+        }
+        try {
+          await ensureBsc();
+          const [balance, summary, holdings, contractBalance] = await Promise.all([
+            token.balanceOf(account),
+            contract.getUserSummary(account, tokenAddress),
+            contract.getUserInvestments(account, tokenAddress),
+            token.balanceOf(ADDRESS)
+          ]);
+          $("token-balance").textContent = `${formatAmount(balance)} ${TOKEN_SYMBOL}`;
+          $("contract-balance").textContent = `${formatAmount(contractBalance)} ${TOKEN_SYMBOL}`;
+          $("investment-count").textContent = summary.packageCount.toString();
+          $("total-invested").textContent = `${formatAmount(summary.totalInvested)} ${TOKEN_SYMBOL}`;
+          $("pending-income").textContent = `${formatAmount(summary.totalClaimableNow)} ${TOKEN_SYMBOL}`;
+          $("next-claim").textContent = `${formatAmount(summary.totalClaimableNow)} ${TOKEN_SYMBOL}`;
+          $("wallet-hint").textContent = `Connected: ${account}${summary.held ? " · Account is held" : ""}${summary.blocked ? " · Account is blocked" : ""}`;
+          claimButton.disabled = Boolean(summary.held || summary.blocked || summary.totalClaimableNow === 0n);
+          const rows = [];
+          const events = [];
+          for (const investment of holdings) {
+            const available = investment.pendingROI + investment.pendingLevel;
+            events.push({
+              time: investment.createdAt,
+              text: `Deposited <strong>${formatAmount(investment.amount)} ${TOKEN_SYMBOL}</strong> (package #${investment.packageIndex})`
+            });
+            if (available > 0n) {
+              events.push({
+                time: null,
+                text: `Claimable on #${investment.packageIndex}: <strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong>`
+              });
+            }
+            rows.push(
+              `<div class="investment-row"><span>#${investment.packageIndex}</span><span>Deposit<br><strong>${formatAmount(investment.amount)} ${TOKEN_SYMBOL}</strong></span><span>Earned<br><strong>${formatAmount(investment.totalEarned)} ${TOKEN_SYMBOL}</strong></span><span>Claimable<br><strong>${formatAmount(available)} ${TOKEN_SYMBOL}</strong></span></div>`
+            );
+          }
+          events.push(
+            { time: null, text: `Total claimed: <strong>${formatAmount(summary.totalClaimed)} ${TOKEN_SYMBOL}</strong>` },
+            { time: null, text: `Remaining earning cap: <strong>${formatAmount(summary.totalRemainingToEarn)} ${TOKEN_SYMBOL}</strong>` },
+            { time: null, text: `Direct referrals: <strong>${summary.directs}</strong>` },
+            { time: null, text: `Status: <strong>${summary.blocked ? "Blocked" : summary.held ? "Held" : "Active"}</strong>` }
+          );
+          events.sort((a, b) => {
+            if (a.time === null) return b.time === null ? 0 : 1;
+            if (b.time === null) return -1;
+            return Number(b.time - a.time);
+          });
+          const activityRows = events.map(e =>
+            `<div class="investment-row" style="grid-template-columns:170px 1fr"><span>${e.time === null ? "Current" : formatTimestamp(e.time)}</span><span>${e.text}</span></div>`);
+          $("activity").innerHTML = activityRows.length ? activityRows.join("") : '<p class="empty">No activity found for this wallet.</p>';
+          $("investments").innerHTML = rows.length ? rows.join("") : '<p class="empty">No investments found for this wallet.</p>';
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      function parsedInvestmentAmount() {
+        const raw = amountInput.value.trim();
+        if (!raw) throw new Error("Enter an investment amount.");
+        if (!/^\d+(\.\d+)?$/.test(raw)) throw new Error(`Enter a valid ${TOKEN_SYMBOL} amount.`);
+        const value = ethers.parseUnits(raw, tokenDecimals);
+        if (value <= 0n) throw new Error("Investment amount must be greater than zero.");
+        return value;
+      }
+
+      async function getInvestmentDetails() {
+        if (!contract || !token || !account) throw new Error("Connect your wallet first.");
+        await ensureBsc();
+        const amount = parsedInvestmentAmount();
+        const [limits, cost, balance, allowance] = await Promise.all([
+          contract.getDepositLimits(account, tokenAddress),
+          contract.getRequiredApproval(amount),
+          token.balanceOf(account),
+          token.allowance(account, ADDRESS)
+        ]);
+        if (amount < limits.minAmount || amount > limits.maxAmount || amount > limits.remainingLifetime) {
+          throw new Error(`Deposit must be within the current limits of ${formatAmount(limits.minAmount)}–${formatAmount(limits.maxAmount)} ${TOKEN_SYMBOL}, with ${formatAmount(limits.remainingLifetime)} ${TOKEN_SYMBOL} remaining in your lifetime limit.`);
+        }
+        if (balance < cost.totalRequired) {
+          throw new Error(`Insufficient ${TOKEN_SYMBOL}. You need ${formatAmount(cost.totalRequired)} ${TOKEN_SYMBOL} including the ${formatAmount(cost.fee)} ${TOKEN_SYMBOL} fee, but have ${formatAmount(balance)}.`);
+        }
+        return { amount, limits, cost, balance, allowance };
+      }
+
+      async function checkInvestment() {
+        try {
+          const details = await getInvestmentDetails();
+          const detail = `Deposit: ${formatAmount(details.amount)} ${TOKEN_SYMBOL}. Total approval: ${formatAmount(details.cost.totalRequired)} ${TOKEN_SYMBOL}, including ${formatAmount(details.cost.fee)} fee.`;
+          $("check-result").textContent = detail;
+          if (details.allowance < details.cost.totalRequired) {
+            report(`${detail} Approve ${TOKEN_SYMBOL} before investing.`, "");
+          } else {
+            report(`${detail} Ready to deposit.`, "success");
+          }
+          return true;
+        } catch (error) {
+          $("check-result").textContent = explainError(error);
+          report(explainError(error), "error");
+          return false;
+        }
+      }
+
+      async function approveUsdt() {
+        try {
+          if (!signer) throw new Error("Connect your wallet first.");
+          const details = await getInvestmentDetails();
+          report(`Approve ${formatAmount(details.cost.totalRequired)} ${TOKEN_SYMBOL} in your wallet…`, "");
+          const approval = await token.approve(ADDRESS, details.cost.totalRequired);
+          report(`Approval submitted: ${approval.hash}. Waiting for confirmation…`);
+          await approval.wait();
+          report(`${TOKEN_SYMBOL} approved. You can now click Invest.`, "success");
+          await checkInvestment();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      async function invest() {
+        try {
+          if (!signer || !contract || !token || !account) throw new Error("Connect your wallet first.");
+          const details = await getInvestmentDetails();
+          const enteredReferrer = $("referrer").value.trim();
+          const referrer = enteredReferrer ? ethers.getAddress(enteredReferrer) : ethers.ZeroAddress;
+          if (details.allowance < details.cost.totalRequired) {
+            report(`Requesting ${TOKEN_SYMBOL} approval. Confirm the approval in your wallet.`, "");
+            const approval = await token.approve(ADDRESS, details.cost.totalRequired);
+            report(`Approval submitted: ${approval.hash}. Waiting for confirmation…`);
+            await approval.wait();
+          }
+          report("Submitting deposit. Confirm the transaction in your wallet.", "");
+          const transaction = await contract.deposit(tokenAddress, details.amount, referrer);
+          report(`Investment submitted: ${transaction.hash}. Waiting for confirmation…`);
+          await transaction.wait();
+          report(`Deposit confirmed. Transaction: ${transaction.hash}`, "success");
+          $("check-result").textContent = "";
+          await refresh();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      async function claim() {
+        try {
+          if (!contract) throw new Error("Connect your wallet first.");
+          await ensureBsc();
+          report("Submitting claim. Confirm the transaction in your wallet.", "");
+          const transaction = await contract.claim(tokenAddress);
+          report(`Claim submitted: ${transaction.hash}. Waiting for confirmation…`);
+          await transaction.wait();
+          report(`Claim confirmed. Transaction: ${transaction.hash}`, "success");
+          await refresh();
+        } catch (error) {
+          report(explainError(error), "error");
+        }
+      }
+
+      connectButton.addEventListener("click", connect);
+      checkButton.addEventListener("click", checkInvestment);
+      investButton.addEventListener("click", invest);
+      $("approve-button").addEventListener("click", approveUsdt);
+      claimButton.addEventListener("click", claim);
+      refreshButton.addEventListener("click", refresh);
+
+      document.querySelectorAll("[data-token]").forEach(button => {
+        button.addEventListener("click", () => selectToken(button.dataset.token));
+      });
+
+      async function loadContractBalance() {
+        try {
+          await loadTokenOptions();
+          const option = tokenOptions[TOKEN_SYMBOL];
+          const readToken = new ethers.Contract(option.address, TOKEN_ABI, readProvider);
+          const bal = await readToken.balanceOf(ADDRESS);
+          $("contract-balance").textContent = `${ethers.formatUnits(bal, option.decimals).replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1")} ${TOKEN_SYMBOL}`;
+        } catch (error) {
+          $("contract-balance").textContent = "Unavailable";
+          report(`Could not load contract ${TOKEN_SYMBOL} balance: ${explainError(error)}`, "error");
+        }
+      }
+      loadContractBalance();
+      setInterval(loadContractBalance, 60000);
+      if (window.ethereum) {
+        window.ethereum.on("accountsChanged", () => window.location.reload());
+        window.ethereum.on("chainChanged", () => window.location.reload());
+      } else {
+        $("wallet-hint").textContent = "No browser wallet detected. Install a compatible wallet to connect.";
+      }
+    })();
+  </script>
 </body>
 </html>
