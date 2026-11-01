@@ -371,11 +371,33 @@
         const [usdt, gc] = await Promise.all([readContract.USDT_BEP20(), readContract.GC_ADDRESS()]);
         for (const [symbol, address] of [["USDT", usdt], ["GC", gc]]) {
           const checksummed = ethers.getAddress(address);
-          const [supported, decimals] = await Promise.all([
+          const [supported, decimals, actual] = await Promise.all([
             readContract.isSupportedToken(checksummed),
-            readContract.getTokenDecimals(checksummed)
+            readContract.getTokenDecimals(checksummed),
+            new ethers.Contract(checksummed, ["function decimals() view returns (uint8)"], readProvider).decimals().catch(() => null)
           ]);
-          if (supported) tokenOptions[symbol] = { address: checksummed, decimals: Number(decimals) };
+          if (supported) {
+            tokenOptions[symbol] = {
+              address: checksummed,
+              decimals: Number(decimals),
+              mismatch: actual !== null && Number(actual) !== Number(decimals),
+              actualDecimals: actual === null ? null : Number(actual)
+            };
+          }
+        }
+      }
+
+      function updateDepositAvailability() {
+        const option = tokenOptions[TOKEN_SYMBOL];
+        const blocked = Boolean(option && option.mismatch);
+        const connected = Boolean(account);
+        checkButton.disabled = !connected || blocked;
+        investButton.disabled = !connected || blocked;
+        $("approve-button").disabled = !connected || blocked;
+        if (blocked) {
+          const message = `${TOKEN_SYMBOL} deposits are unavailable: the token uses ${option.actualDecimals} decimals but the contract treats it as ${option.decimals}, so its minimum deposit is far above the total ${TOKEN_SYMBOL} supply. The contract owner needs to fix this before ${TOKEN_SYMBOL} can be deposited.`;
+          $("check-result").textContent = message;
+          report(message, "error");
         }
       }
 
@@ -400,6 +422,7 @@
           token = new ethers.Contract(tokenAddress, TOKEN_ABI, signer || readProvider);
           $("check-result").textContent = "";
           applyTokenLabels();
+          updateDepositAvailability();
           await Promise.all([loadContractBalance(), refresh()]);
         } catch (error) {
           report(explainError(error), "error");
@@ -473,6 +496,7 @@
           investButton.disabled = false;
           $("approve-button").disabled = false;
           report(`Wallet connected. Confirm each ${TOKEN_SYMBOL} transaction in your wallet.`, "success");
+          updateDepositAvailability();
           await refresh();
         } catch (error) {
           report(explainError(error), "error");
